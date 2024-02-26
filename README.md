@@ -1,6 +1,6 @@
 # Puppeteer Job Application Bot
 
-This application is a simple Puppeteer script designed to automate job applications on platforms supporting "Easy Apply" options, specifically tailored for remote positions.
+This application is a simple Puppeteer script designed to automate job applications on LinkedIn "Easy Apply" and "Remote" options.
 
 ## Prerequisites
 
