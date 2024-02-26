@@ -26,7 +26,8 @@ Before running the script, you need to make a few manual adjustments:
 
 ## Running the Application
 
-Once the setup is complete and you've configured the script with your details, you can run the application with the following command: node script.js
+Once the setup is complete and you've configured the script with your details, you can run the application with the following command: 
+node script.js
 
 
 ## Important Notes
