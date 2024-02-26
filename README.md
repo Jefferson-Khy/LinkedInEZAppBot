@@ -34,7 +34,7 @@ Once the setup is complete and you've configured the script with your details, y
 - This script is intended for educational purposes and personal use. Please use responsibly and ethically, respecting all terms of service of the job application platform.
 - Ensure you have the legal right to automate actions on your account on the job application platform.
 - The efficiency and success rate of the script can vary based on the website's layout changes, your internet connection, and other factors.
-- The Setup section assumes you have node installed on your machine
+
 
 
 
