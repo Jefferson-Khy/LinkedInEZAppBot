@@ -68,7 +68,7 @@ async function openBrowser() {
 
 
   console.log('finished applying!!')
-  await browser.close
+  await browser.close()
 }
 
 openBrowser();
