@@ -1,98 +1,23 @@
-
-
-
-
-
-if (error) {
-  // Handle the error (e.g., prompt for input)
-  const allTexts = await page.evaluate(() => {
-      const elements = Array.from(document.querySelectorAll('label'));
-      return elements
-        .filter(el => el.textContent.trim().endsWith('?'))
-        .map(el => {
-          const text = el.textContent.trim();
-          // Use the for attribute of the label to extract numbers
-          const forAttribute = el.getAttribute('for');
-          // Adjust the regex to match the specific part after "FormElement-"
-          const match = forAttribute.match(/FormElement-(\d+-\d+)/);
-          const numbers = match ? match[1] : ''; // This captures the numbers after "FormElement-"
-          return { text, labelId: numbers };
-        });
-        
-  });
-    
-  
-  for (const text of allTexts) {
-      // Prompt the user for each input field that has an error
-      console.log(`Please fill in the field for: ${text.text} JobID: ${text.labelId}`);
-      const readline = require('readline').createInterface({
-          input: process.stdin,
-          output: process.stdout
-        });
-        
-      const askQuestion = (questionText) => new Promise((resolve) => {
-          readline.question(questionText, (input) => {
-              resolve(input);
-              readline.close(); // Consider closing readline only when completely done, not after each question.
-          });
-      });
-        
-      // Usage in your loop
-      const userResponse = await askQuestion('Enter something: ');
-      console.log(`You entered: ${userResponse}`);
-      await page.evaluate((selector) => {
-          document.querySelector(selector).value = '';
-      }, `[id*="${text.labelId}"]`);
-        
-      await page.type(`[id*="${text.labelId}"]`, userResponse);
-
-      // ... Collect user input and fill in the field
-      // You would need to implement the logic to actually collect user input and fill the field
+// Perform Login 
+async function performLogin(page, email, password, delay) {
+  let loginSuccess = false; // Flag to check the login success
+  try {
+     // Now that the page is refreshed, proceed with the login
+     await page.type('#username', email); // Type in the email
+     await page.type('#password', password); // Type in the password
+    // Delay sign in button click to help prevent bot detection
+    await delay(2000, 'delay before clicking log-in button'); // Pauses for xxxx milliseconds
+    await page.click('button.btn__primary--large')
+    // Replace '.expected-element' with the selector for the element you expect to be present on successful login
+    loginSuccess = await page.evaluate(() => !!document.querySelector('.global-nav__primary-link global-nav__primary-link-me-menu-trigger artdeco-dropdown__trigger artdeco-dropdown__trigger--placement-bottom ember-view'));
+    if (!loginSuccess) {
+      throw new Error('Login failed: Expected element not found'); // This will be caught by the catch block below
+    }
+  } catch (error) {
+    console.log(error, 'performLogin failed');
+    loginSuccess = false; // Set to false if there was an error or login failed
   }
-} else {
-  // Click the next button if no error is present
-  const nextButton = await page.waitForSelector('[data-easy-apply-next-button][type="button"]', { visible: true });
-  await nextButton.click();
+  return loginSuccess; // Return the status of the login attempt
 }
 
-
-
-
-const labelsText = await page.evaluate(() => {
-  const labels = document.querySelectorAll('div[data-test-text-entity-list-form-component] label, div[data-test-single-line-text-form-component] label');
-  const texts = Array.from(labels).map(label => label.textContent.trim());
-  return texts;
-});
-
-
-
-const allTexts = await page.evaluate(() => {
-  // Targeting labels within specific divs
-  const elements = Array.from(document.querySelectorAll('div[data-test-text-entity-list-form-component] label, div[data-test-single-line-text-form-component] label'));
-  return elements
-    .filter(el => el.textContent.trim().endsWith('?'))
-    .map(el => {
-      const text = el.textContent.trim();
-      // Extract numbers from the "for" attribute related to "FormElement-"
-      const forAttribute = el.getAttribute('for');
-      const match = forAttribute ? forAttribute.match(/FormElement-(\d+-\d+)/) : null;
-      const numbers = match ? match[1] : '';
-      return { text, labelId: numbers };
-    });
-});
-
-
-
-const jobEzAppButtonExists = await page.$('.jobs-apply-button');
-if (!jobEzAppButtonExists) {
-  console.log('Apply button not found, exiting function.');
-  return; // Exit the function early
-}
-// If the button exists, proceed to click it
-const jobEzAppButton = await page.waitForSelector('.jobs-apply-button', { visible: true });
-await jobEzAppButton.click();
-
-
-
-
-await page.waitForSelector("[custom-user-id='12w3541234']");
+module.exports = performLogin;
