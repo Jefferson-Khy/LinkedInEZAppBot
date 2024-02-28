@@ -20,9 +20,7 @@ To set up the application on your local machine, follow these steps:
 
 Before running the script, you need to make a few manual adjustments:
 
-1. **Credentials**: The script currently does not prompt for usernames or passwords. You must enter your credentials manually in the script. Locate the `performLogin` function in `script.js` and replace placeholder credentials with your actual username and password.
-
-2. **Job Title**: The script is preset to search for specific job title. If you wish to change the job title modify the `performSearch` function within `script.js` according to your preferences.
+1. **Job Title**: The script is preset to search for specific job title. If you wish to change the job title modify the `performSearch` function within `script.js` according to your preferences.
 
 ## Running the Application
 
