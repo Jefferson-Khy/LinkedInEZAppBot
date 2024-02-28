@@ -28,11 +28,6 @@ async function openBrowser() {
   // Login function
   await loginProcedure(page, delay)
 
-  // await Promise.race([
-  //   page.waitForNavigation({ waitUntil: 'networkidle0' }), // Waits for navigation to complete
-  //   delay(17000, 'delay incase captcha appears') // Waits (input/1000) seconds, allowing time for manual CAPTCHA resolution
-  // ]);
-
   // Type in search bar field
   // Replace text to desired job title
   await performSearch(page, 'software developer')
@@ -56,7 +51,7 @@ async function openBrowser() {
   while(count > -1){
     for(const job of jobIDs){
       await page.click(`[data-occludable-job-id="${job}"]`);
-      await delay(3500)
+      await delay(3500, "delay between each apply button click")
       // Start application process
       await performApply(page)
     }
@@ -66,8 +61,7 @@ async function openBrowser() {
     count--
   }  
 
-
-  console.log('finished applying!!')
+  console.log('Finished Applying!!')
   await browser.close()
 }
 
