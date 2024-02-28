@@ -22,18 +22,49 @@ async function openBrowser() {
   await page.setViewport({ width: 1250, height: 1080 });
   await page.goto('https://linkedin.com'); // Navigates to the website
 
+  delay(1800, 'delay clicking login so page can fully load')
+  await page.click('a.nav__button-secondary'); // Click the login button/link
+  
   // Login function
+  // Move loginProcedure to its own js file
   // Replace email/username and password
-  await performLogin(page, 'USERNAME HERE', 'PASSWORD HERE');
+  const readline = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  // Function to request user credentials and attempt login
+  async function loginProcedure(page) {
+    let loginSuccess = false;
+    while (!loginSuccess) {
+      const email = await new Promise((resolve) => {
+        readline.question('Enter your email/username: ', resolve);
+      });
+      const password = await new Promise((resolve) => {
+        readline.question('Enter your password: ', resolve);
+      });
 
-  // Delay sign in button click to help prevent bot detection
-  await delay(2000, 'delay before clicking log-in button'); // Pauses for xxxx milliseconds
-  await page.click('button.btn__primary--large')
+      loginSuccess = await performLogin(page, email, password, delay); // Assuming delay is handled inside performLogin
+      if (loginSuccess) {
+        console.log('Login successful!');
+        // Continue with the rest of your code here after successful login
+      } else {
+        console.log('Login failed, please try again.');
+        // The while loop will continue, asking the user for their credentials again
+      }
+    }
+    readline.close();
+  }
+  
+  // Usage example (make sure this is in an async context or wrapped in an async function):
+  // await loginProcedure(page);
+  
+  await loginProcedure(page)
 
-  await Promise.race([
-    page.waitForNavigation({ waitUntil: 'networkidle0' }), // Waits for navigation to complete
-    delay(17000, 'delay incase captcha appears') // Waits (input/1000) seconds, allowing time for manual CAPTCHA resolution
-  ]);
+
+  // await Promise.race([
+  //   page.waitForNavigation({ waitUntil: 'networkidle0' }), // Waits for navigation to complete
+  //   delay(17000, 'delay incase captcha appears') // Waits (input/1000) seconds, allowing time for manual CAPTCHA resolution
+  // ]);
 
   // Type in search bar field
   // Replace text to desired job title

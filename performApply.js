@@ -21,7 +21,7 @@ const inputText = require("./fillInputOnError");
         // Keeps clicking next button
         try {
             while(nextExists != null){
-                console.log('next button detected')
+                //console.log('next button detected')
                 // Check for the presence of the error message
                 const error = await page.$('.artdeco-inline-feedback--error');
                 if(error){
