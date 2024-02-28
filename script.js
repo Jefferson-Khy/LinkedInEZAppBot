@@ -1,9 +1,9 @@
 const puppeteer = require('puppeteer');
-const performLogin = require('./performLogin');
 const performSearch = require('./performSearch')
 const performFilters = require('./performFilters');
 const grabJobIds = require('./grabJobIds');
 const performApply = require('./performApply');
+const loginProcedure = require('./loginUserInput')
 
 async function openBrowser() {
   const browser = await puppeteer.launch({ headless: false }); // Launches Chrome
@@ -26,40 +26,7 @@ async function openBrowser() {
   await page.click('a.nav__button-secondary'); // Click the login button/link
   
   // Login function
-  // Move loginProcedure to its own js file
-  // Replace email/username and password
-  const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  // Function to request user credentials and attempt login
-  async function loginProcedure(page) {
-    let loginSuccess = false;
-    while (!loginSuccess) {
-      const email = await new Promise((resolve) => {
-        readline.question('Enter your email/username: ', resolve);
-      });
-      const password = await new Promise((resolve) => {
-        readline.question('Enter your password: ', resolve);
-      });
-
-      loginSuccess = await performLogin(page, email, password, delay); // Assuming delay is handled inside performLogin
-      if (loginSuccess) {
-        console.log('Login successful!');
-        // Continue with the rest of your code here after successful login
-      } else {
-        console.log('Login failed, please try again.');
-        // The while loop will continue, asking the user for their credentials again
-      }
-    }
-    readline.close();
-  }
-  
-  // Usage example (make sure this is in an async context or wrapped in an async function):
-  // await loginProcedure(page);
-  
-  await loginProcedure(page)
-
+  await loginProcedure(page, delay)
 
   // await Promise.race([
   //   page.waitForNavigation({ waitUntil: 'networkidle0' }), // Waits for navigation to complete
