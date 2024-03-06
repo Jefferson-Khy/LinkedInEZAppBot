@@ -1,13 +1,13 @@
 const inputText = require("./fillInputOnError");
 
   // Application process
-  async function performApply(page) {
+  async function performApply(page, jobCount) {
     try {
         try {
             const jobEzAppButtonExists = await page.$('.jobs-apply-button');
             if (!jobEzAppButtonExists) {
-                console.log('Apply button not found, exiting function.');
-            return; // Exit the function early
+                console.log('Apply button not found, moving on to next job.');
+                return jobCount; // Exit the function early
             }
              // Click apply button for current job selected
             const jobEzAppButton = await page.waitForSelector('.jobs-apply-button', { visible: true });
@@ -72,9 +72,11 @@ const inputText = require("./fillInputOnError");
             if (doneButton) doneButton.click();
           });
           
+        return jobCount + 1
 
-      } catch (error) {
+    } catch (error) {
         console.log(error, 'application process failed')
+        return jobCount;
     }
     
   }

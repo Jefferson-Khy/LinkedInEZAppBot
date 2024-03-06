@@ -22,7 +22,7 @@ async function openBrowser() {
   await page.setViewport({ width: 1250, height: 1080 });
   await page.goto('https://linkedin.com'); // Navigates to the website
 
-  delay(1800, 'delay clicking login so page can fully load')
+  await delay(1800, 'delay clicking login so page can fully load')
   await page.click('a.nav__button-secondary'); // Click the login button/link
   
   // Login function
@@ -42,26 +42,36 @@ async function openBrowser() {
   // Applies filters Ez-apply and Remote
   await performFilters(page, delay)
 
-  // Grabs jobIds in UL
-  await delay(2500, 'wait for list of jobs to load')
-  const jobIDs = await grabJobIds(page)
-
-  let count = 1
+  let jobCount = 0
   let listPage = 1
-  while(count > -1){
-    for(const job of jobIDs){
-      await page.click(`[data-occludable-job-id="${job}"]`);
-      await delay(3500, "delay between each apply button click")
-      // Start application process
-      await performApply(page)
-    }
-    listPage += 1
-    await page.click(`[aria-label="Page ${listPage}"][type="button"]`)
-    await delay(3500)
-    count--
-  }  
+  while (jobCount < 10) {
+    // Grabs jobIds in UL
+    await delay(1500, 'wait for list of jobs to load'); // Wait for the initial list of jobs to load
+    let jobIDs = await grabJobIds(page); // Grab initial list of job IDs
 
-  console.log('Finished Applying!!')
+    for (const job of jobIDs) {
+        if (jobCount >= 10) {
+          // Break out of the for loop if we've reached the job application limit
+          break;
+        }
+        await page.click(`[data-occludable-job-id="${job}"]`);
+        await delay(3500, "delay between each apply button click");
+        // Start application process
+        jobCount = await performApply(page, jobCount);
+        console.log(jobCount);
+    }
+    listPage += 1; // Move to the next page
+    await page.click(`[aria-label="Page ${listPage}"][type="button"]`);
+    await delay(3500, 'wait for list of jobs to load after page change'); // Wait for the next list of jobs to load
+
+    // Check if it's necessary to continue
+    if (jobCount >= 10) break; // If you've already processed 100 jobs, no need to grab new IDs
+
+    // Update jobIDs with the new set from the next page
+    jobIDs = await grabJobIds(page); // Grab new set of job IDs after the page has loaded
+}
+
+  console.log(`Finished Applying! Applied to ${jobcount} jobs!!`)
   await browser.close()
 }
 
