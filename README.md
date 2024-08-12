@@ -21,7 +21,7 @@ To set up the application on your local machine, follow these steps:
 Before running the script, you need to make a few manual adjustments:
 
 1. **Job Title**: The script is preset to search for specific job title. If you wish to change the job title modify the `performSearch` function within `script.js` according to your preferences.
-2. **Pages**: Currently it is setup to go through 2 pages, you can modify it to increase or decrease on 'script.js' by increasing count variable.
+2. **Job Count**: Currently it is setup to go apply to 100 jobs, you can modify it to increase or decrease on 'script.js' by increasing/decreasing number in while loop.
 
 ## Running the Application
 
