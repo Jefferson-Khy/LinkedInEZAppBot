@@ -1,4 +1,4 @@
-const inputText = require("./fillInputOnError");
+const inputText = require("./inputText");
 
   // Application process
   async function performApply(page, jobCount) {
@@ -6,14 +6,14 @@ const inputText = require("./fillInputOnError");
         try {
             const jobEzAppButtonExists = await page.$('.jobs-apply-button');
             if (!jobEzAppButtonExists) {
-                console.log('Apply button not found, moving on to next job.');
+                console.log('\nApply button not found, moving on to next job.');
                 return jobCount; // Exit the function early
             }
              // Click apply button for current job selected
             const jobEzAppButton = await page.waitForSelector('.jobs-apply-button', { visible: true });
             await jobEzAppButton.click();
         } catch (error) {
-            console.log(error, 'click apply button unsuccessful')
+            console.log(error, '\nclick apply button unsuccessful')
         }
        
         // Gets button handle otherwise return null
@@ -36,7 +36,7 @@ const inputText = require("./fillInputOnError");
                 nextExists = await page.$('[data-easy-apply-next-button][type="button"]')
             }
         } catch (error) {
-            console.error(error, 'Next button click failed');
+            console.error(error, '\nNext button click failed');
         }
 
         // Review button click
@@ -55,7 +55,7 @@ const inputText = require("./fillInputOnError");
                 reviewButtonExists = await page.$('[aria-label="Review your application"]')
             }
         } catch (error) {
-            console.log(error, 'review button unscucessful')
+            console.log(error, '\nreview button unscucessful')
         }
 
         // Check if follow check input exists, click it
@@ -75,7 +75,7 @@ const inputText = require("./fillInputOnError");
         return jobCount + 1
 
     } catch (error) {
-        console.log(error, 'application process failed')
+        console.log(error, '\napplication process failed')
         return jobCount;
     }
     

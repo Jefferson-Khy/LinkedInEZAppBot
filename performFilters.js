@@ -4,7 +4,7 @@
     const eZButton = await page.waitForSelector('[aria-label="Easy Apply filter."]', { visible: true });
     await eZButton.click();
 
-    delay(2500, 'give time for taskbar reload then click remote')
+    delay(2500, '\ngive time for taskbar reload then click remote')
     // Remote button
     const remoteButton = await page.waitForSelector('#searchFilter_workplaceType', { visible: true });
     await remoteButton.click();

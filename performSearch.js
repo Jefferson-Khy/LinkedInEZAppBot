@@ -5,7 +5,7 @@ async function performSearch(page, jobTitle) {
     await page.type('.search-global-typeahead__input', jobTitle);
     await page.keyboard.press('Enter');
   } catch (error) {
-    console.log(error, 'performSearch failed')
+    console.log(error, '\nperformSearch failed')
   }
     
   }

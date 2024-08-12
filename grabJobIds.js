@@ -7,7 +7,7 @@
         let jobIds = await page.$$eval('[data-occludable-job-id]', elements => elements.map(el => el.getAttribute('data-occludable-job-id')));
         return jobIds
       } catch (error) {
-        console.log(error, 'grabJobIds failed')
+        console.log(error, '\ngrabJobIds failed')
     }
     
   }
